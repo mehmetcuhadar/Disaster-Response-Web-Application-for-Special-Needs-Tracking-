@@ -29,9 +29,8 @@ app.get('/add',(req,res) => {
 })
 */
 app.get('/getSehir', (req, res) => {
-    const searchParam = req.query.searchParam; // get the search parameter from the query string
-    const filter = searchParam ? { sehir_title: { $regex: searchParam, $options: 'i' } } : {}; // create a filter object based on the search parameter
-    Sehir.find(filter)
+
+    Sehir.find({})
       .then((result) => {
         res.send(result);
       })
@@ -42,7 +41,9 @@ app.get('/getSehir', (req, res) => {
   });
 
 app.get('/getIlce',(req,res) => {
-    Ilce.find({})
+    const il_key = req.query.il_key; // get the search parameter from the query string
+    const filter = il_key ? { ilce_sehirkey: il_key} : {};
+    Ilce.find(filter)
     .then((result) => {
         res.send(result)
     })
@@ -52,7 +53,9 @@ app.get('/getIlce',(req,res) => {
 })
 
 app.get('/getMahalle',(req,res) => {
-    Mahalle.find()
+    const ilce_key = req.query.ilce_key; // get the search parameter from the query string
+    const filter = ilce_key ? { mahalle_ilcekey: ilce_key} : {};
+    Mahalle.find(filter)
     .then((result) => {
         res.send(result)
     })
@@ -63,8 +66,8 @@ app.get('/getMahalle',(req,res) => {
 
 
 app.get('/getSokak', (req, res) => {
-    const searchParam = req.query.searchParam; // get the search parameter from the query string
-    const filter = searchParam ? { sokak_cadde_id: searchParam } : {}; // create a filter object based on the search parameter
+    const mahalle_key = req.query.mahalle_key; // get the search parameter from the query string
+    const filter = mahalle_key ? { sokak_cadde_mahallekey: mahalle_key } : {}; // create a filter object based on the search parameter
     Sokak.find(filter)
       .then((result) => {
         res.send(result);
