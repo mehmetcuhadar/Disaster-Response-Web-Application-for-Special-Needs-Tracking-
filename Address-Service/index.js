@@ -11,6 +11,13 @@ mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
 .then((result) => app.listen(3000))
 .catch((err) => console.log(err))
 
+
+const cors = require('cors');
+
+app.use(cors());
+
+// your routes and other server code here
+
 /*
 app.get('/add',(req,res) => {
 
