@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Web Page</title>
+  </head>
+  <body>
+    <h1>JSON Data Exampleasdasd</h1>
+    <button onclick="getData()">Get Data</button>
+    <div id="labels"></div>
+    
+    <script>
+      function getData() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(this.responseText);
+            showLabels(data);
+          }
+        };
+        xhr.open("GET", "http://localhost:3000/getIlce", true);
+        xhr.send();
+      }
+      
+      function showLabels(data) {
+        var labelsDiv = document.getElementById("labels");
+        for (var i = 0; i < data.length; i++) {
+          var label = document.createElement("label");
+          label.textContent = data[i] + ": " + data[i];
+          labelsDiv.appendChild(label);
+        }
+      }
+    </script>
+  </body>
+</html>
