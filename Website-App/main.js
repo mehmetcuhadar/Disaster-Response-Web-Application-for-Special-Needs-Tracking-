@@ -3,7 +3,7 @@ const sehirContainer = document.getElementById('sehir');
 const ilceContainer = document.getElementById('ilce');
 const mahalleContainer = document.getElementById('mahalle');
 const sokakContainer = document.getElementById('sokak');
-
+const saveButton = document.getElementById('save');
 // make a GET request to the server endpoint to retrieve Sehir data
 // get reference to the container element
 
@@ -102,3 +102,30 @@ axios.get('http://localhost:3000/getSehir')
         console.error(error);
       });
   }); 
+
+
+
+// Add a click event listener to the button
+saveButton.addEventListener('click', () => {
+  // Get the input values from the form
+  const il_title = sehirContainer.options[sehirContainer.selectedIndex].textContent;
+  const ilce_title = ilceContainer.options[ilceContainer.selectedIndex].textContent;
+  const mahalle_title = mahalleContainer.options[mahalleContainer.selectedIndex].textContent;
+  const sokak_cadde_title = sokakContainer.options[sokakContainer.selectedIndex].textContent;
+  console.log(il_title, ilce_title, mahalle_title, sokak_cadde_title);
+  // Send the GET request to the server using Axios
+  axios.get('http://localhost:3001/addInput', {
+    params: {
+      il_title,
+      ilce_title,
+      mahalle_title,
+      sokak_cadde_title
+    }
+  })
+  .then((response) => {
+    console.log(response.data); // Display the response data in the console
+  })
+  .catch((error) => {
+    console.log(error); // Display the error in the console
+  });
+});

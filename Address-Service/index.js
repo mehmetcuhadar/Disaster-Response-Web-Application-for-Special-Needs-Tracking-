@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
-const Sehir = require('./sehir.js')
-const Ilce = require('./ilce.js')
-const Mahalle = require('./mahalle.js')
-const Sokak = require('./sokak.js')
+const Sehir = require('./modules/sehir.js')
+const Ilce = require('./modules/ilce.js')
+const Mahalle = require('./modules/mahalle.js')
+const Sokak = require('./modules/sokak.js')
 
 const dbURL = 'mongodb+srv://mcuhadar18:ee8iLI9KF5HpYpoM@adress.qai6yhk.mongodb.net/adress-log?retryWrites=true&w=majority'
 mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
@@ -16,25 +16,7 @@ const cors = require('cors');
 
 app.use(cors());
 
-// your routes and other server code here
 
-/*
-app.get('/add',(req,res) => {
-
-    const adress = new Address({
-        city : 'Ankara'
-    })
-
-    adress.save()
-        .then((result) => { 
-            res.send(result)
-            console.log("I am here")
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-})
-*/
 app.get('/getSehir', (req, res) => {
 
     Sehir.find({})
@@ -85,15 +67,4 @@ app.get('/getSokak', (req, res) => {
       });
   });
 
-/*
-app.get('/retrieve',(req,res) => {
-    Address.find()
-        .then((result)=> {
-            res.render('index',{addresses:result})
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-})
 
-*/
