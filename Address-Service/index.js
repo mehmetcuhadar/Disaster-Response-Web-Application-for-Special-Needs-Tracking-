@@ -20,6 +20,7 @@ app.use(cors());
 app.get('/getSehir', (req, res) => {
 
     Sehir.find({})
+    .collation({ locale: 'tr', strength: 2 })
     .sort({sehir_title: 1})
       .then((result) => {
         res.send(result);
@@ -34,6 +35,7 @@ app.get('/getIlce',(req,res) => {
     const il_key = req.query.il_key; // get the search parameter from the query string
     const filter = il_key ? { ilce_sehirkey: il_key} : {};
     Ilce.find(filter)
+    .collation({ locale: 'tr', strength: 2 })
     .sort({ilce_title: 1})
     .then((result) => {
         res.send(result)
@@ -47,6 +49,7 @@ app.get('/getMahalle',(req,res) => {
     const ilce_key = req.query.ilce_key; // get the search parameter from the query string
     const filter = ilce_key ? { mahalle_ilcekey: ilce_key} : {};
     Mahalle.find(filter)
+    .collation({ locale: 'tr', strength: 2 })
     .sort({mahalle_title: 1})
     .then((result) => {
         res.send(result)
@@ -61,6 +64,8 @@ app.get('/getSokak', (req, res) => {
     const mahalle_key = req.query.mahalle_key; // get the search parameter from the query string
     const filter = mahalle_key ? { sokak_cadde_mahallekey: mahalle_key } : {}; // create a filter object based on the search parameter
     Sokak.find(filter)
+    .collation({ locale: 'tr', strength: 2 })
+    .sort({sokak_title: 1})
       .then((result) => {
         res.send(result);
       })
