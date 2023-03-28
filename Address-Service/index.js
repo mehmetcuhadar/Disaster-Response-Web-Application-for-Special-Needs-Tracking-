@@ -20,6 +20,7 @@ app.use(cors());
 app.get('/getSehir', (req, res) => {
 
     Sehir.find({})
+    .sort({sehir_title: 1})
       .then((result) => {
         res.send(result);
       })
@@ -33,6 +34,7 @@ app.get('/getIlce',(req,res) => {
     const il_key = req.query.il_key; // get the search parameter from the query string
     const filter = il_key ? { ilce_sehirkey: il_key} : {};
     Ilce.find(filter)
+    .sort({ilce_title: 1})
     .then((result) => {
         res.send(result)
     })
@@ -45,6 +47,7 @@ app.get('/getMahalle',(req,res) => {
     const ilce_key = req.query.ilce_key; // get the search parameter from the query string
     const filter = ilce_key ? { mahalle_ilcekey: ilce_key} : {};
     Mahalle.find(filter)
+    .sort({mahalle_title: 1})
     .then((result) => {
         res.send(result)
     })
