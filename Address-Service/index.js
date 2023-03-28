@@ -65,7 +65,7 @@ app.get('/getSokak', (req, res) => {
     const filter = mahalle_key ? { sokak_cadde_mahallekey: mahalle_key } : {}; // create a filter object based on the search parameter
     Sokak.find(filter)
     .collation({ locale: 'tr', strength: 2 })
-    .sort({sokak_title: 1})
+    .sort({sokak_cadde_title: 1})
       .then((result) => {
         res.send(result);
       })
