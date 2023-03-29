@@ -1,0 +1,63 @@
+/* Style for the body of the page */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Style for the labels of the dropdowns */
+  label {
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for the dropdown menus */
+  select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+  }
+  
+  /* Style for the button */
+  button {
+    padding: 10px;
+    background-color: #ff0000;
+    border: none;
+    color: rgb(0, 0, 0);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Style for the button when hovered over */
+  button:hover {
+    background-color: #ffffff;
+  }
+  
+  /* Style for the container divs */
+  div {
+    margin-bottom: 10px;
+  }
+  /* Style for the navigation bar */
+  .navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #ff0000;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .navbar li {
+    float: left;
+  }
+  .navbar li a {
+    display: block;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  .navbar li a:hover {
+    background-color: #ffffff;
+  }
+  

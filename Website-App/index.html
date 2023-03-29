@@ -1,36 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Disaster Response Web Application</title>
     <meta charset="UTF-8">
-    <title>Location Dropdowns</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./Styles/style.css">
   </head>
   <body>
-    <div>
-      <label for="sehir">Sehir:</label>
-      <select id="sehir">
-		<option value="">--Seçiniz--</option>
-      </select>
-    </div>
-    <div>
-      <label for="ilce">Ilce:</label>
-      <select id="ilce">
-        <option value="">--Seçiniz--</option>
-      </select>
-    </div>
-    <div>
-      <label for="mahalle">Mahalle:</label>
-      <select id="mahalle">
-        <option value="">--Seçiniz--</option>
-      </select>
-    </div>
-    <div>
-      <label for="sokak">Sokak:</label>
-      <select id="sokak">
-        <option value="">--Seçiniz--</option>
-      </select>
-    </div>
-    <button id="save"> Talebi Kaydet</button>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="main.js"></script>
+    <ul class="navbar">
+      <li><a href="#" onclick="navigateTo('./Pages/map.html')">Map</a></li>
+      <li><a href="#" onclick="navigateTo('./Pages/help.html')">Help</a></li>
+    </ul>
+    <script src="./Script/navigation.js"></script>
   </body>
 </html>

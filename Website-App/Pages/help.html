@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Location Dropdowns</title>
+    <link rel="stylesheet" href="../Styles/style.css">
+    <script src="../Script/navigation.js"></script>
+  </head>
+  
+  <body>
+    <ul class="navbar">
+        <li><a href="#" onclick="navigateTo('../index.html')">Home</a></li>
+        <li><a href="#" onclick="navigateTo('map.html')">Map</a></li>
+      </ul>
+      
+    <div>
+      <label for="sehir">İl:</label>
+      <select id="sehir">
+		<option value="">--İl Seçiniz--</option>
+      </select>
+    </div>
+    <div>
+      <label for="ilce">İlçe:</label>
+      <select id="ilce">
+        <option value="">--İlçe Seçiniz--</option>
+      </select>
+    </div>
+    <div>
+      <label for="mahalle">Mahalle:</label>
+      <select id="mahalle">
+        <option value="">--Mahalle Seçiniz--</option>
+      </select>
+    </div>
+    <div>
+      <label for="sokak">Sokak:</label>
+      <select id="sokak">
+        <option value="">--Cadde/Sokak Seçiniz--</option>
+      </select>
+    </div>
+    <button id="save"> Talebi Kaydet</button>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="../Script/locations.js"></script>
+  </body>
+</html>
