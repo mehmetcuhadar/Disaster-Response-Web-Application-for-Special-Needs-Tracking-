@@ -1,4 +1,6 @@
 /* Style for the body of the page */
+
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -61,3 +63,67 @@ body {
     background-color: #ffffff;
   }
   
+  
+  /* CSS for form styling */
+  form {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #444;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+.form-row {
+display: flex;
+flex-wrap: wrap;
+margin-bottom: 10px;
+}
+
+.form-group {
+width: 100%;
+margin-bottom: 10px;
+}
+
+.form-group > label {
+display: inline-block;
+margin-bottom: 5px;
+font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+width: 100%;
+padding: 10px;
+border-radius: 4px;
+border: 1px solid #ccc;
+box-sizing: border-box;
+margin-bottom: 10px;
+font-size: 16px;
+}
+
+input[type="submit"] {
+background-color: #4CAF50;
+color: #fff;
+border: none;
+padding: 12px 20px;
+border-radius: 4px;
+cursor: pointer;
+font-size: 16px;
+}
+
+input[type="submit"]:hover {
+background-color: #45a049;
+}
+
+textarea {
+height: 150px;
+resize: vertical;
+}

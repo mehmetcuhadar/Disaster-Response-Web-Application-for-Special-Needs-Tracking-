@@ -92,6 +92,7 @@ axios.get('http://localhost:3000/getSehir')
       .then(response => {
         // create an HTML option element for each Ilce document and append it to the Ilce dropdown
         response.data.forEach(sokak => {
+          console.log(mahalleKey);
           const sokakOption = document.createElement('option');
           sokakOption.value = sokak.sokak_cadde_mahallekey;
           sokakOption.textContent = sokak.sokak_cadde_title;
