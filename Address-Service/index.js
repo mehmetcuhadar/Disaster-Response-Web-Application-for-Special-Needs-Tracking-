@@ -58,7 +58,7 @@ app.get('/getMahalle',(req,res) => {
         console.log(err)
     })
 })
-
+ 
 
 app.get('/getSokak', (req, res) => {
     const mahalle_key = req.query.mahalle_key; // get the search parameter from the query string
