@@ -1,8 +1,16 @@
-// get references to the container elements
+
+  // get references to the container elements
+const form = document.getElementById('form');
+const message = document.getElementById('message'); //Form submitted successfully
 const sehirContainer = document.getElementById('sehir');
 const ilceContainer = document.getElementById('ilce');
 const mahalleContainer = document.getElementById('mahalle');
 const sokakContainer = document.getElementById('sokak');
+const siteContainer = document.getElementById('site');
+const apartmanContainer = document.getElementById('apartman');
+const phoneContainer = document.getElementById('phone');
+const needContainer = document.getElementById('special-needs');
+const infoContainer = document.getElementById('additional-info');
 const saveButton = document.getElementById('save');
 // make a GET request to the server endpoint to retrieve Sehir data
 // get reference to the container element
@@ -27,7 +35,7 @@ axios.get('http://localhost:3000/getSehir')
     const sehirKey = event.target.value;
 
     // clear the Ilce dropdown
-    ilceContainer.innerHTML = '<option value="">-- Select an Ilce --</option>';
+    ilceContainer.innerHTML = '<option value="">-- İlçe Seçiniz --</option>';
 
     // make a GET request to the server endpoint to retrieve Ilce data for the selected Sehir
     axios.get('http://localhost:3000/getIlce', {
@@ -54,7 +62,7 @@ axios.get('http://localhost:3000/getSehir')
     const ilceKey = event.target.value;
 
     // clear the Ilce dropdown
-    mahalleContainer.innerHTML = '<option value="">-- Select an Mahalle --</option>';
+    mahalleContainer.innerHTML = '<option value="">-- Mahalle Seçiniz --</option>';
 
     // make a GET request to the server endpoint to retrieve Ilce data for the selected Sehir
     axios.get('http://localhost:3000/getMahalle', {
@@ -66,7 +74,7 @@ axios.get('http://localhost:3000/getSehir')
         // create an HTML option element for each Ilce document and append it to the Ilce dropdown
         response.data.forEach(mahalle => {
           const mahalleOption = document.createElement('option');
-          mahalleOption.value = mahalle.mahalle_ilcekey;
+          mahalleOption.value = mahalle.mahalle_key;
           mahalleOption.textContent = mahalle.mahalle_title;
           mahalleContainer.appendChild(mahalleOption);
         });
@@ -79,9 +87,10 @@ axios.get('http://localhost:3000/getSehir')
 
   mahalleContainer.addEventListener('change', event => {
     const mahalleKey = event.target.value;
+    console.log("mahalle: ", mahalleKey);
 
     // clear the Ilce dropdown
-    sokakContainer.innerHTML = '<option value="">-- Select an Mahalle --</option>';
+    sokakContainer.innerHTML = '<option value="">-- Sokak Seçiniz --</option>';
 
     // make a GET request to the server endpoint to retrieve Ilce data for the selected Sehir
     axios.get('http://localhost:3000/getSokak', {
@@ -92,7 +101,6 @@ axios.get('http://localhost:3000/getSehir')
       .then(response => {
         // create an HTML option element for each Ilce document and append it to the Ilce dropdown
         response.data.forEach(sokak => {
-          console.log(mahalleKey);
           const sokakOption = document.createElement('option');
           sokakOption.value = sokak.sokak_cadde_mahallekey;
           sokakOption.textContent = sokak.sokak_cadde_title;
@@ -113,18 +121,30 @@ saveButton.addEventListener('click', () => {
   const ilce_title = ilceContainer.options[ilceContainer.selectedIndex].textContent;
   const mahalle_title = mahalleContainer.options[mahalleContainer.selectedIndex].textContent;
   const sokak_cadde_title = sokakContainer.options[sokakContainer.selectedIndex].textContent;
-  console.log(il_title, ilce_title, mahalle_title, sokak_cadde_title);
+  const site_title = siteContainer.textContent;
+  const apartman_title = apartmanContainer.textContent;
+  const tel_number = phoneContainer.textContent;
+  const ihtiyac_title = needContainer.options[needContainer.selectedIndex].textContent;
+  const add_info = infoContainer.textContent;
+  console.log(il_title, ilce_title, mahalle_title, sokak_cadde_title, site_title, apartman_title, tel_number, ihtiyac_title, add_info);
   // Send the GET request to the server using Axios
   axios.get('http://localhost:3001/addInput', {
     params: {
       il_title,
       ilce_title,
       mahalle_title,
-      sokak_cadde_title
+      sokak_cadde_title,
+      site_title,
+      apartman_title,
+      tel_number,
+      ihtiyac_title,
+      add_info
     }
   })
   .then((response) => {
     console.log(response.data); // Display the response data in the console
+    form.reset()
+    message.style.display = "block"
   })
   .catch((error) => {
     console.log(error); // Display the error in the console

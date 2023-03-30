@@ -18,7 +18,19 @@ const inputSchema = new Schema({
         type : String,
         require : true
     },
-    need_title: {
+    site_title: {
+        type : String,
+        require : true
+    },
+    apartman_title: {
+        type : String,
+        require : true
+    },
+    tel_number: {
+        type : String,
+        require : true
+    },
+    ihtiyac_title: {
         type : String,
         require : true
     },
