@@ -1,4 +1,8 @@
 // get references to the container elements
+function navigateTo(url) {
+  window.location.href = url;
+}
+
 const sehirContainer = document.getElementById('sehir');
 const ilceContainer = document.getElementById('ilce');
 const mahalleContainer = document.getElementById('mahalle');
