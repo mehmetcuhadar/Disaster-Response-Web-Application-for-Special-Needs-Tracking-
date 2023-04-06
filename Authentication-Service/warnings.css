@@ -1,0 +1,14 @@
+#warning-message {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffcc00;
+    color: #000;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
