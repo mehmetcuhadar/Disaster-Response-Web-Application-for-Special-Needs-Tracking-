@@ -1,3 +1,7 @@
+if (sessionStorage.getItem('username')) {
+  window.location.href = 'index.html';
+}
+
 function addUser() {
   axios.post('https://localhost:3002/addUser', "")
         .then((response) => {
@@ -28,11 +32,17 @@ function login() {
     } else {
         axios.post('https://localhost:3002/login', data)
         .then((response) => {
-          console.log(response.data);
-          if(response.data){
+          if(response.data[0]){
             console.log("Redirecting to dashboard...");
             var warningMessage = document.getElementById("warning-message");
             warningMessage.style.display = "none";
+
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("name", response.data[1]);
+            sessionStorage.setItem("surname", response.data[2]);
+            sessionStorage.setItem("phone", response.data[3]);
+            sessionStorage.setItem("loggedIn", true);
+
             window.location = './index.html';
           }else{
             var warningMessage = document.getElementById("warning-message");

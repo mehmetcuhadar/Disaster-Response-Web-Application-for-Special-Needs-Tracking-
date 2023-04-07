@@ -70,14 +70,14 @@ app.post('/login', async (req, res) => {
   if (!user) {
     // Handle user not found error
     console.log("User not found")
-    return res.send(false);
+    return res.send([false]);
   }
   // Compare the user's input password to the hashed password stored in MongoDB
   const isPasswordValid = await bcrypt.compare(password + pepper, user.password);
   if (isPasswordValid) {
     // Handle successful login
-    res.send(true);
+    res.send([true, user.name, user.surname, user.phone]);
   } else {
-    res.send(false);
+    res.send([false]);
   }
 });
