@@ -10,7 +10,8 @@
     <meta name="author" content="">
 
     <title>SB Admin 2 - Login</title>
-	<script src="../../../Authentication-Service/auth.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="../../Script/login.js"></script>
 
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" type="text/css" href="../../../Authentication-Service/warnings.css">
@@ -62,6 +63,9 @@
                                         </div>
                                         <button type="button" class="btn btn-primary btn-user btn-block" onclick=login()>
                                             Login
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-user btn-block" onclick=addUser()>
+                                            Add User
                                         </button>
                                         <div id="warning-message"></div>
 
