@@ -1,11 +1,20 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const https = require('https');
+const fs = require('fs');
 const cors = require('cors');
 const app = express()
 const Input = require("./input.js")
 const dbURL = 'mongodb+srv://mcuhadar18:ee8iLI9KF5HpYpoM@adress.qai6yhk.mongodb.net/input-log?retryWrites=true&w=majority'
 mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
-.then((result) => app.listen(3001))
+.then((result) => {
+  https.createServer({
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+  }, app).listen(3001, function () {
+    console.log('Server listening on https://localhost:3001');
+  });
+})
 .catch((err) => console.log(err))
 
 
@@ -65,5 +74,113 @@ app.get('/addInput', (req, res) => {
         console.log(err);
         res.status(500).send("An error occurred while retrieving inputs.");
       });
+  });
+  
+  app.get('/getIlCounts', (req, res) => {
+    Input.aggregate([
+      {
+        $group: {
+          _id: { il_title: "$il_title", ihtiyac_title: "$ihtiyac_title" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.il_title",
+          ihtiyac_counts: {
+            $push: { ihtiyac_title: "$_id.ihtiyac_title", count: "$count" },
+          },
+          total_count: { $sum: "$count" },
+        },
+      },
+      { $project: { _id: 0, il_title: "$_id", ihtiyac_counts: 1, total_count: 1 } },
+    ])
+      .then((counts) => {
+        res.send(counts);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("An error occurred while retrieving counts.");
+      });
+  });
+  
+  
+  
+  
+
+  app.get('/getIlceCounts', (req, res) => {
+    const il_title = req.query.il_title || "";
+    Input.aggregate([
+      { $match: { il_title: il_title } },
+      {
+        $group: {
+          _id: { ilce_title: "$ilce_title", ihtiyac_title: "$ihtiyac_title" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.ilce_title",
+          ihtiyac_counts: {
+            $push: { ihtiyac_title: "$_id.ihtiyac_title", count: "$count" },
+          },
+          total_count: { $sum: "$count" },
+        },
+      },
+      { $project: { _id: 0, ilce_title: "$_id", ihtiyac_counts: 1, total_count: 1 } },
+    ])
+      .then((counts) => {
+        res.send(counts);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("An error occurred while retrieving counts.");
+      });
+  });
+  
+  app.get("/getIhtiyacCounts", (req, res) => {
+    Input.aggregate([
+      {
+        $group: {
+          _id: "$ihtiyac_title",
+          count: { $sum: 1 },
+          il_title: { $push: "$il_title" }
+        }
+      },
+      {
+        $unwind: "$il_title"
+      },
+      {
+        $group: {
+          _id: {
+            ihtiyac_title: "$_id",
+            il_title: "$il_title"
+          },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $group: {
+          _id: "$_id.ihtiyac_title",
+          count: { $sum: "$count" },
+          il_title: { $push: { il_title: "$_id.il_title", count: "$count" } }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          ihtiyac_title: "$_id",
+          count: 1,
+          il_title: 1
+        }
+      }
+    ])
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).send("An error occurred while retrieving ihtiyac counts.");
+    });
   });
   

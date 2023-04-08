@@ -154,10 +154,7 @@ html,body,h1,h2,h3,h4 {font-family:"Lato", sans-serif}
         <div class="form-group">
           <label for="special-needs">İhtiyaç:</label>
           <select id="special-needs" name="special-needs">
-            <option value="">--Select--</option>
-            <option value="water">Water</option>
-            <option value="rescue-team">Rescue Team</option>
-            <option value="food">Food</option>
+            <option value="">--İHTİYAÇ SEÇİNİZ--</option>
             </select>
           </div>
         </div>
@@ -165,12 +162,17 @@ html,body,h1,h2,h3,h4 {font-family:"Lato", sans-serif}
           <label for="additional-info">Ek Bilgi:</label>
           <textarea id="additional-info" name="additional-info"></textarea>
         </div>
+        <div class="w3-panel w3-yellow" id = "warning-message" style="display: none;">
+          <h3>TALEBİNİZ KAYDEDİLEMEDİ!</h3>
+          <p> LÜTFEN İL İLÇE MAHALLE VE İHTİYAÇ BİLGİLERİNİ DOLDURNUZ</p>
+        </div>
+        <div class="w3-panel w3-green" id="success-message" style="display: none;">
+          <h3>Başarıyla Kaydedildi!</h3>
+        </div>  
         <div>
           <button type="button" id="save" class="w3-btn w3-deep-purple" style="width: 100%;">Talebi Kaydet</button>
         </div>
-        <div class="w3-panel w3-green" id="message" style="display: none;">
-          <h3>Başarıyla Kaydedildi!</h3>
-        </div>  
+
   </form>
     
     

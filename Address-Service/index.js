@@ -1,18 +1,29 @@
 const mongoose = require('mongoose')
 const express = require('express')
+const https = require('https');
+const fs = require('fs');
 const app = express()
 const Sehir = require('./modules/sehir.js')
 const Ilce = require('./modules/ilce.js')
 const Mahalle = require('./modules/mahalle.js')
 const Sokak = require('./modules/sokak.js')
+const Ihtiyac = require('./modules/ihtiyac.js');
 
 const dbURL = 'mongodb+srv://mcuhadar18:ee8iLI9KF5HpYpoM@adress.qai6yhk.mongodb.net/adress-log?retryWrites=true&w=majority'
 mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
-.then((result) => app.listen(3000))
+.then((result) => {
+  https.createServer({
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+  }, app).listen(3000, function () {
+    console.log('Server listening on https://localhost:3000');
+  });
+})
 .catch((err) => console.log(err))
 
 
 const cors = require('cors');
+
 
 app.use(cors());
 
@@ -76,3 +87,31 @@ app.get('/getSokak', (req, res) => {
   });
 
 
+  app.get('/getIhtiyac', (req, res) => {
+
+    Ihtiyac.find()
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send('Error retrieving data');
+      });
+  });
+
+
+  app.get('/addIhtiyac', (req, res) => {
+
+    const input = new Ihtiyac({
+      ihtiyac_title: req.query.ihtiyac_title || ""
+    });
+    
+    input.save()
+      .then((result) => { 
+        res.send(result);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send('An error occurred while saving the input.');
+      });
+  });
