@@ -2,7 +2,8 @@
   // get references to the container elements
 const form = document.getElementById('form');
 const success_message = document.getElementById('success-message'); //Form submitted successfully
-const warning_message = document.getElementById('warning-message'); //Form submitted successfully
+const warning_message = document.getElementById('warning-message'); //Form is not submitted successfully
+const responseId = document.getElementById('response-id');
 const sehirContainer = document.getElementById('sehir');
 const ilceContainer = document.getElementById('ilce');
 const mahalleContainer = document.getElementById('mahalle');
@@ -156,10 +157,10 @@ saveButton.addEventListener('click', () => {
       }
     })
     .then((response) => {
-      console.log(response.data); // Display the response data in the console
       form.reset()
       warning_message.style.display = "none"
       success_message.style.display = "block"
+      responseId.textContent = response.data.id;
     })
     .catch((error) => {
       console.log(error); // Display the error in the console

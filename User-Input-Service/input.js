@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const inputSchema = new Schema({
+    id: {
+        type: String,
+        unique: true,
+        require : true
+    },
     il_title :{
         type : String,
         require : true
@@ -35,6 +40,14 @@ const inputSchema = new Schema({
         require : true
     },
     add_info:{
+        type: String,
+        require: true
+    },
+    created_at:{
+        type: Date,
+        require: true
+    },
+    status:{
         type: String,
         require: true
     }

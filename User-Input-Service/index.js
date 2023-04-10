@@ -3,6 +3,8 @@ const express = require('express')
 const https = require('https');
 const fs = require('fs');
 const cors = require('cors');
+const moment = require('moment-timezone');
+const shortid = require('shortid');
 const app = express()
 const Input = require("./input.js")
 const dbURL = 'mongodb+srv://mcuhadar18:ee8iLI9KF5HpYpoM@adress.qai6yhk.mongodb.net/input-log?retryWrites=true&w=majority'
@@ -20,28 +22,41 @@ mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
 
 app.use(cors());
 
-app.get('/addInput', (req, res) => {
-    const input = new Input({
-      il_title: req.query.il_title || "", // Use the value of il_title query parameter 
-      ilce_title: req.query.ilce_title || "", // Use the value of ilce_title query parameter 
-      mahalle_title: req.query.mahalle_title || "", // Use the value of mahalle_title query parameter 
-      sokak_cadde_title: req.query.sokak_cadde_title || "",  // Use the value of sokak_cadde_title query parameter 
-      site_title: req.query.site_title || "",
-      apartman_title: req.query.apartman_title || "",
-      tel_number: req.query.tel_number || "",
-      ihtiyac_title: req.query.ihtiyac_title || "",
-      add_info: req.query.add_info || "",
-    });
-    
-    input.save()
-      .then((result) => { 
-        res.send(true + result);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send('An error occurred while saving the input.');
-      });
+app.get('/addInput', async (req, res) => {
+  let id = shortid.generate();
+  let input = new Input({
+    id,
+    il_title: req.query.il_title || "", // Use the value of il_title query parameter 
+    ilce_title: req.query.ilce_title || "", // Use the value of ilce_title query parameter 
+    mahalle_title: req.query.mahalle_title || "", // Use the value of mahalle_title query parameter 
+    sokak_cadde_title: req.query.sokak_cadde_title || "",  // Use the value of sokak_cadde_title query parameter 
+    site_title: req.query.site_title || "",
+    apartman_title: req.query.apartman_title || "",
+    tel_number: req.query.tel_number || "",
+    ihtiyac_title: req.query.ihtiyac_title || "",
+    add_info: req.query.add_info || "",
+    created_at: moment.tz('Europe/Istanbul').toDate(),
+    status: "0"
   });
+  while (true) {
+    try {
+      await input.save();
+      res.send({id: id});
+      break;
+    } catch (error) {
+      if (error.name === 'MongoError' && error.code === 11000) {
+        // 11000 is the code for duplicate key error
+        id = shortid.generate();
+        input.id = id;
+      } else {
+        console.error(error);
+        res.status(500).send('An error occurred while saving the input.');
+        break;
+      }
+    }
+  }
+});
+
   
   app.get('/getInputs', (req, res) => {
     const il_title = req.query.il_title || "";
@@ -53,6 +68,8 @@ app.get('/addInput', (req, res) => {
     const tel_number = req.query.tel_number || "";
     const ihtiyac_title = req.query.ihtiyac_title || "";
     const add_info = req.query.add_info || "";
+    const status = req.query.status || "";
+    const created_at = req.query.created_at || "";
   
     const filter = {
       il_title: { $regex: `.*${il_title}.*`, $options: "i" },
@@ -64,6 +81,8 @@ app.get('/addInput', (req, res) => {
       tel_number: { $regex: `.*${tel_number}.*`, $options: "i" },
       ihtiyac_title: { $regex: `.*${ihtiyac_title}.*`, $options: "i" },
       add_info: { $regex: `.*${add_info}.*`, $options: "i" },
+      status: { $regex: `.*${status}.*`, $options: "i" },
+
     };
   
     Input.find(filter)
