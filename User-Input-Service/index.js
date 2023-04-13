@@ -7,6 +7,9 @@ const moment = require('moment-timezone');
 const shortid = require('shortid');
 const app = express()
 const Input = require("./input.js")
+const accountSid = "AC611662a21d1aaede003324c0f221730a";
+const authToken = "5fed3102167a8df03149f610215bc3f6";
+//const client = require("twilio")(accountSid, authToken);
 const dbURL = 'mongodb+srv://mcuhadar18:ee8iLI9KF5HpYpoM@adress.qai6yhk.mongodb.net/input-log?retryWrites=true&w=majority'
 mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
 .then((result) => {
@@ -32,7 +35,7 @@ app.get('/addInput', async (req, res) => {
     sokak_cadde_title: req.query.sokak_cadde_title || "",  // Use the value of sokak_cadde_title query parameter 
     site_title: req.query.site_title || "",
     apartman_title: req.query.apartman_title || "",
-    tel_number: req.query.tel_number || "",
+    tel_number: "".concat("+90",req.query.tel_number) || "",
     ihtiyac_title: req.query.ihtiyac_title || "",
     add_info: req.query.add_info || "",
     created_at: moment.tz('Europe/Istanbul').toDate(),
@@ -42,6 +45,12 @@ app.get('/addInput', async (req, res) => {
     try {
       await input.save();
       res.send({id: id});
+      /*if (input.tel_number != ""){
+        client.messages
+        .create({ body: ("Talebiniz alınmıştır. Takip numaranız: ").concat(" ", id), from: "+15077107058", to: input.tel_number })
+        .then(message => console.log(message.sid));
+      }
+      */
       break;
     } catch (error) {
       if (error.name === 'MongoError' && error.code === 11000) {
