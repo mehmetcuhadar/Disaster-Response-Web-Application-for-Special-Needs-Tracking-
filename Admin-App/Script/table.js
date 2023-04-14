@@ -4,6 +4,20 @@ var currentPage = 1;
 var requestsPerPage = 10;
 var requestsData = [];
 
+const pending_button = document.getElementById("pending-button");
+
+pending_button.addEventListener("click",() => {
+	axios.get('https://localhost:3001/getInputs')
+	.then(response => {
+		// Save the data to a variable
+		requestsData = response.data;
+
+		// Populate the accordion and pagination
+		populateRequests(currentPage);
+		populatePagination();
+	})
+	.catch(error => console.error(error));
+})
 // Fetch the data
 axios.get('https://localhost:3001/getInputs')
 	.then(response => {
@@ -15,6 +29,7 @@ axios.get('https://localhost:3001/getInputs')
 		populatePagination();
 	})
 	.catch(error => console.error(error));
+
 
 
 // Function to populate the accordion with requests data

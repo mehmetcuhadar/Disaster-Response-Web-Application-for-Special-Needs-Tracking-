@@ -4,9 +4,11 @@ const https = require('https');
 const fs = require('fs');
 const cors = require('cors');
 const moment = require('moment-timezone');
+const bodyParser = require('body-parser');
 const shortid = require('shortid');
 const app = express()
-const Input = require("./input.js")
+const Input = require("./input.js");
+const { query } = require('express');
 const accountSid = "AC611662a21d1aaede003324c0f221730a";
 const authToken = "5fed3102167a8df03149f610215bc3f6";
 //const client = require("twilio")(accountSid, authToken);
@@ -24,6 +26,7 @@ mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
 
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get('/addInput', async (req, res) => {
   let id = shortid.generate();
@@ -68,6 +71,7 @@ app.get('/addInput', async (req, res) => {
 
   
   app.get('/getInputs', (req, res) => {
+    const id = req.query.id || "";
     const il_title = req.query.il_title || "";
     const ilce_title = req.query.ilce_title || "";
     const mahalle_title = req.query.mahalle_title || "";
@@ -80,7 +84,7 @@ app.get('/addInput', async (req, res) => {
     const status = req.query.status || "";
     const created_at = req.query.created_at || "";
   
-    const filter = {
+    var filter = {
       il_title: { $regex: `.*${il_title}.*`, $options: "i" },
       ilce_title: { $regex: `.*${ilce_title}.*`, $options: "i" },
       mahalle_title: { $regex: `.*${mahalle_title}.*`, $options: "i" },
@@ -93,6 +97,10 @@ app.get('/addInput', async (req, res) => {
       status: { $regex: `.*${status}.*`, $options: "i" },
 
     };
+    
+    if (id != ""){
+      filter = id ? { id: id} : {};
+    }
   
     Input.find(filter)
       .then((inputs) => {
@@ -210,5 +218,27 @@ app.get('/addInput', async (req, res) => {
       console.log(err);
       res.status(500).send("An error occurred while retrieving ihtiyac counts.");
     });
+  });
+  
+
+  app.put('/changeStatus/:id', async (req, res) => {
+    const id = req.params.id;
+    const { status } = req.body;
+    
+    try {
+      const filter = { id: id };
+      const update = { status: status };
+      
+      // Find the document by ID and update its status field
+      const updatedInput = await Input.updateOne(filter, update);
+  
+      if (!updatedInput) {
+        return res.status(404).send('Input not found');
+      }
+  
+      res.send(updatedInput);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   });
   

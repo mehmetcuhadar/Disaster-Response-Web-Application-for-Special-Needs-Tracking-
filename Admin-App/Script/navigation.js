@@ -8,12 +8,11 @@ searchDiv.addEventListener("click",() => {changeDiv("search-requests")});
 adminDiv.addEventListener("click",() => {changeDiv("admin")});
 pendingDiv.addEventListener("click",() => {changeDiv("pending-requests")});
 
-function changeDiv(cityName) {
+function changeDiv(div_name) {
   var i;
-  console.log(cityName);
   var x = document.getElementsByClassName("bar-items");
   for (i = 0; i < x.length; i++) {
     x[i].style.display = "none";  
   }
-  document.getElementById(cityName).style.display = "block";  
+  document.getElementById(div_name).style.display = "block";  
 }
