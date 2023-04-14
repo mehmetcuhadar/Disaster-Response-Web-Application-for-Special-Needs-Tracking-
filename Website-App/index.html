@@ -1,159 +1,233 @@
-
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Special Needs Tracking App</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="./Styles/style.css">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<style>
-  html,body,h1,h2,h3,h4 {font-family:"Lato", sans-serif}
-  .w3-tag, .fa {cursor:pointer}
-  .w3-tag {height:15px;width:15px;padding:0;margin-top:6px}
-#map{
-            height:780px;
-            width:100%;
-        }
-</style>
+  <title>Special Needs Tracking App</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./Styles/style.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: "Lato", sans-serif
+    }
+
+    .w3-tag,
+    .fa {
+      cursor: pointer
+    }
+
+    .w3-tag {
+      height: 15px;
+      width: 15px;
+      padding: 0;
+      margin-top: 6px
+    }
+
+    #map {
+      height: 780px;
+      width: 100%;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- Links (sit on top) -->
-<div class="w3-top">
-  <div class="w3-row w3-large w3-deep-purple">
-    <div class="w3-col s3">
-      <a href="#" class="w3-button w3-block w3-hover-purple">
-        <i class="fa fa-home"></i>  Başlangıç
-      </a>
-    </div>
-    <div class="w3-col s3">
-      <a href="#plans" class="w3-button w3-block w3-hover-purple">
-        <i class="fa fa-pencil"></i>  Talep Gir
-      </a>
-    </div>
-    <div class="w3-col s3">
-      <a href="#about" class="w3-button w3-block w3-hover-purple">
-        <i class="fa fa-newspaper-o"></i> Ekip
-      </a>
-    </div>
-    <div class="w3-col s3">
-      <a href="#search" class="w3-button w3-block w3-hover-purple">
-        <i class="fa fa-search"></i> Talep Sorgulama
-      </a>
+  <!-- Links (sit on top) -->
+  <div class="w3-top">
+    <div class="w3-row w3-large w3-deep-purple">
+      <div class="w3-col s3">
+        <a href="#" class="w3-button w3-block w3-hover-purple">
+          <i class="fa fa-home"></i> Başlangıç
+        </a>
+      </div>
+      <div class="w3-col s3">
+        <a href="#plans" class="w3-button w3-block w3-hover-purple">
+          <i class="fa fa-pencil"></i> Talep Gir
+        </a>
+      </div>
+      <div class="w3-col s3">
+        <a href="#about" class="w3-button w3-block w3-hover-purple">
+          <i class="fa fa-newspaper-o"></i> Ekip
+        </a>
+      </div>
+      <div class="w3-col s3">
+        <a href="#search" class="w3-button w3-block w3-hover-purple">
+          <i class="fa fa-search"></i> Talep Sorgulama
+        </a>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Content -->
-<div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+  <!-- Content -->
+  <div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
 
-  <div class="w3-center w3-padding-32">
-    <span class="w3-xlarge w3-bottombar w3-border-deep-purple w3-padding-16">İHTİYAÇ HARİTASI</span>
-  </div>
-  <!-- Slideshow -->
-  <div class="w3-container">
+    <div class="w3-center w3-padding-32">
+      <span class="w3-xlarge w3-bottombar w3-border-deep-purple w3-padding-16">İHTİYAÇ HARİTASI</span>
+    </div>
+    <!-- Slideshow -->
+    <div class="w3-container">
 
-    <div id="map"></div>
-    <script>
-            function initMap(){
-                var options = {
-                    zoom:8,
-                    center: {lat:39.55,lng:32.51}
-                }
+      <div id="map"></div>
+      <script>
+        function initMap() {
+          
+          const apiKey = 'AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&';
 
-                var map = new
-                google.maps.Map(document.getElementById('map'), options);
-            }
+          axios.get('https://localhost:3001/getInputs')
+            .then(response => {
+              const data = response.data;
+              
+              const options = {
+                zoom: 8,
+                center: { lat: 39.55, lng: 32.51 }
+              };
+
+              const map = new google.maps.Map(document.getElementById('map'), options);
+
+              for(let i = 0 ; i< data.length; i++){
+                const şehir = data[i].il_title;
+                const ilce = data[i].ilce_title;
+                const mahalle = data[i].mahalle_title;
+                const sokak = data[i].sokak_cadde_title;
+                const site = data[i].site_title;
+                const apartman = data[i].apartman_title;
+                const tel_number = data[i].tel_number;
+                const ihtiyac = data[i].ihtiyac_title;
+                const moreInfo = data[i].add_info;
+                const date = data[i].created_at;
+                const status = data[i].status;
+                const address2 = `${şehir} ${ilce} ${mahalle} ${sokak} ${site} ${apartman}`;
+                const helpInfo = `Telefon: ${tel_number} İhtiyaç: ${ihtiyac} Daha fazla Bilgi: ${moreInfo} Tarih: ${date} Durum: ${status}`;
+
+                axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address2}&key=${apiKey}`)
+                .then(response => {
+          
+                  const location = response.data.results[0].geometry.location;
+                  const lat = location.lat;
+                  const lng = location.lng;
+
+                  const marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: address2
+                  });
+
+                  const informationPanel = new google.maps.InfoWindow({
+                    content: helpInfo
+                  });
+
+                  marker.addListener('mouseover', () => {
+                    informationPanel.open(map,marker);
+                  });
+
+                  marker.addListener('mouseout', () => {
+                    informationPanel.close();
+                  });
+                })
+                .catch(error => {
+            console.error(error);
+          });
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+      </script>
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&callback=initMap">
+
         </script>
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&callback=initMap">
-
-    </script>
-  </div>
-  
-  <!-- Grid -->
-  <div class="w3-row w3-container">
-    <div class="w3-center w3-padding-64">
-      <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Girebileceğiniz Talepler</span>
-    </div>
-    <div class="w3-col l3 m6 w3-red w3-container w3-padding-16 w3-center">
-      <h3>Arama Kurtarma</h3>
-      <p> Arama kurtarma talepleriniz için AFAD ile iletişime geçilecektir.</p>
     </div>
 
-    <div class="w3-col l3 m6 w3-blue w3-container w3-padding-16 w3-center">
-      <h3>Su & Yiyecek</h3>
-      <p>Talebinizi girerken lütfen kişi sayısını da belirtiniz.</p>
-    </div>
-
-    <div class="w3-col l3 m6 w3-green w3-container w3-padding-16 w3-center">
-      <h3>Tıbbi Malzeme</h3>
-      <p>Talebinizi girerken ilacın adını lütfen belirtiniz.</p>
-    </div>
-
-    <div class="w3-col l3 m6 w3-black w3-container w3-padding-16 w3-center">
-      <h3>Diğer</h3>
-      <p>Bu bölümde her türlü kalan taleplerinizi girebilirsiniz.</p>
-    </div>
-  </div>
-
-  <!-- Grid -->
-  <div class="w3-row-padding" id="plans">
-    <div class="w3-center w3-padding-64">
-      <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Talep Giriniz</span>
-    </div>
-    <form id="form">
-      <div class="form-row">
-        <div class="form-group" style="flex: 1; width: 50%;">
-          <label for="sehir">İl:</label>
-          <select id="sehir" name="province">
-            <option value="">--İL SEÇİNİZ--</option>
-          </select>
-        </div>
-        <div class="form-group" style="flex: 1; width: 50%;">
-          <label for="ilce">İlçe:</label>
-          <select id="ilce" name="district">
-            <option value="">--İLÇE SEÇİNİZ--</option>
-          </select>
-        </div>
+    <!-- Grid -->
+    <div class="w3-row w3-container">
+      <div class="w3-center w3-padding-64">
+        <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Girebileceğiniz Talepler</span>
       </div>
-      <div class="form-row">
-        <div class="form-group" style="flex: 1; width: 50%;">
-          <label for="mahalle">Mahalle:</label>
-          <select id="mahalle" name="neighborhood">
-            <option value="">--MAHALLE SEÇİNİZ--</option>
-          </select>
-        </div>
-        <div class="form-group" style="flex: 1; width: 50%;">
-          <label for="sokak">Sokak:</label>
-          <select id="sokak" name="street">
-            <option value="">--SOKAK SEÇİNİZ--</option>
-          </select>
-        </div>
+      <div class="w3-col l3 m6 w3-red w3-container w3-padding-16 w3-center">
+        <h3>Arama Kurtarma</h3>
+        <p> Arama kurtarma talepleriniz için AFAD ile iletişime geçilecektir.</p>
       </div>
-      <div class="form-row">
-        <div class="form-group" style="flex: 1; width: 50%;">
-          <label for="apartment">Site:</label>
-          <input type="text" id="site" name="apartment">
-        </div>
-        <div class="form-group" style="flex: 1; width: 50%;">
-          <label for="building">Apartman:</label>
-          <input type="text" id="apartman" name="building">
-        </div>
+
+      <div class="w3-col l3 m6 w3-blue w3-container w3-padding-16 w3-center">
+        <h3>Su & Yiyecek</h3>
+        <p>Talebinizi girerken lütfen kişi sayısını da belirtiniz.</p>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="phone">Telefon Numarası:</label>
-          <input type="tel" id="phone" name="phone" placeholder="Başında 0 olmadan giriniz.">
+
+      <div class="w3-col l3 m6 w3-green w3-container w3-padding-16 w3-center">
+        <h3>Tıbbi Malzeme</h3>
+        <p>Talebinizi girerken ilacın adını lütfen belirtiniz.</p>
+      </div>
+
+      <div class="w3-col l3 m6 w3-black w3-container w3-padding-16 w3-center">
+        <h3>Diğer</h3>
+        <p>Bu bölümde her türlü kalan taleplerinizi girebilirsiniz.</p>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div class="w3-row-padding" id="plans">
+      <div class="w3-center w3-padding-64">
+        <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Talep Giriniz</span>
+      </div>
+      <form id="form">
+        <div class="form-row">
+          <div class="form-group" style="flex: 1; width: 50%;">
+            <label for="sehir">İl:</label>
+            <select id="sehir" name="province">
+              <option value="">--İL SEÇİNİZ--</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1; width: 50%;">
+            <label for="ilce">İlçe:</label>
+            <select id="ilce" name="district">
+              <option value="">--İLÇE SEÇİNİZ--</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="special-needs">İhtiyaç:</label>
-          <select id="special-needs" name="special-needs">
-            <option value="">--İHTİYAÇ SEÇİNİZ--</option>
+        <div class="form-row">
+          <div class="form-group" style="flex: 1; width: 50%;">
+            <label for="mahalle">Mahalle:</label>
+            <select id="mahalle" name="neighborhood">
+              <option value="">--MAHALLE SEÇİNİZ--</option>
+            </select>
+          </div>
+          <div class="form-group" style="flex: 1; width: 50%;">
+            <label for="sokak">Sokak:</label>
+            <select id="sokak" name="street">
+              <option value="">--SOKAK SEÇİNİZ--</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex: 1; width: 50%;">
+            <label for="apartment">Site:</label>
+            <input type="text" id="site" name="apartment">
+          </div>
+          <div class="form-group" style="flex: 1; width: 50%;">
+            <label for="building">Apartman:</label>
+            <input type="text" id="apartman" name="building">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Telefon Numarası:</label>
+            <input type="tel" id="phone" name="phone" placeholder="Başında 0 olmadan giriniz.">
+          </div>
+          <div class="form-group">
+            <label for="special-needs">İhtiyaç:</label>
+            <select id="special-needs" name="special-needs">
+              <option value="">--İHTİYAÇ SEÇİNİZ--</option>
             </select>
           </div>
         </div>
@@ -161,90 +235,92 @@
           <label for="additional-info">Ek Bilgi:</label>
           <textarea id="additional-info" name="additional-info"></textarea>
         </div>
-        <div class="w3-panel w3-yellow" id = "warning-message" style="display: none;">
+        <div class="w3-panel w3-yellow" id="warning-message" style="display: none;">
           <h3>TALEBİNİZ KAYDEDİLEMEDİ!</h3>
           <p> LÜTFEN İL İLÇE MAHALLE VE İHTİYAÇ BİLGİLERİNİ DOLDURNUZ</p>
         </div>
         <div class="w3-panel w3-green" id="success-message" style="display: none;">
-          <h3>Başarıyla Kaydedildi! Takip kodu <span id="response-id"></span></h3> </h3>
-        </div>  
+          <h3>Başarıyla Kaydedildi! Takip kodu <span id="response-id"></span></h3>
+          </h3>
+        </div>
         <div>
           <button type="button" id="save" class="w3-btn w3-deep-purple" style="width: 100%;">Talebi Kaydet</button>
         </div>
 
-  </form>
-    
-    
+      </form>
 
-    
-  </div>
 
-  <!-- Grid -->
-  <div class="w3-container" id = "about">
-    <h2>Ekip</h2>
-    <ul class="w3-ul w3-card-4">
-      <li class="w3-bar">
-        <img src="img/img_avatar.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-        <div class="w3-bar-item">
-          <span class="w3-large">Alp</span><br>
-          <span>Frontend Designer</span>
-        </div>
-      </li>
-  
-      <li class="w3-bar">
-        <img src="img/img_avatar.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-        <div class="w3-bar-item">
-          <span class="w3-large">Doğukan</span><br>
-          <span>Database Management</span>
-        </div>
-      </li>
-  
-      <li class="w3-bar">
-        <img src="img/img_avatar2.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-        <div class="w3-bar-item">
-          <span class="w3-large">Hatice</span><br>
-          <span>Frontend Designer</span>
-        </div>
-      </li>
 
-      <li class="w3-bar">
-        <img src="img/img_avatar.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-        <div class="w3-bar-item">
-          <span class="w3-large">Mehmet</span><br>
-          <span>Backend Designer</span>
-        </div>
-      </li>
-    </ul>
-  </div>
 
-  <div id="search">
-    
+    </div>
+
+    <!-- Grid -->
+    <div class="w3-container" id="about">
+      <h2>Ekip</h2>
+      <ul class="w3-ul w3-card-4">
+        <li class="w3-bar">
+          <img src="img/img_avatar.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+          <div class="w3-bar-item">
+            <span class="w3-large">Alp</span><br>
+            <span>Frontend Designer</span>
+          </div>
+        </li>
+
+        <li class="w3-bar">
+          <img src="img/img_avatar.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+          <div class="w3-bar-item">
+            <span class="w3-large">Doğukan</span><br>
+            <span>Database Management</span>
+          </div>
+        </li>
+
+        <li class="w3-bar">
+          <img src="img/img_avatar2.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+          <div class="w3-bar-item">
+            <span class="w3-large">Hatice</span><br>
+            <span>Frontend Designer</span>
+          </div>
+        </li>
+
+        <li class="w3-bar">
+          <img src="img/img_avatar.png" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+          <div class="w3-bar-item">
+            <span class="w3-large">Mehmet</span><br>
+            <span>Backend Designer</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div id="search">
+
       Talep Sorgulama
+    </div>
+
+    <!-- Contact -->
+
+
+
   </div>
 
-  <!-- Contact -->
+  <!-- Footer -->
 
+  <footer class="w3-container w3-padding-32 w3-light-grey w3-center">
+    <h4>İletişim İçin</h4>
+    <div class="w3-xlarge w3-section">
+      <i class="fa fa-facebook-official w3-hover-opacity"></i>
+      <i class="fa fa-instagram w3-hover-opacity"></i>
+      <i class="fa fa-snapchat w3-hover-opacity"></i>
+      <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+      <i class="fa fa-twitter w3-hover-opacity"></i>
+      <i class="fa fa-linkedin w3-hover-opacity"></i>
+    </div>
+    <p>Powered by Koç Students</p>
+  </footer>
 
-
-</div>
-
-<!-- Footer -->
-
-<footer class="w3-container w3-padding-32 w3-light-grey w3-center">
-  <h4>İletişim İçin</h4>
-  <div class="w3-xlarge w3-section">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
-  </div>
-  <p>Powered by Koç Students</p>
-</footer>
-
-<script src="Script/locations.js"></script>
+  <script src="Script/locations.js"></script>
 
 
 </body>
+
 </html>
