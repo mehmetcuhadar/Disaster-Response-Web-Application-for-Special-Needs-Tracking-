@@ -23,9 +23,7 @@ mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
 
 
 const cors = require('cors');
-
-
-app.use(cors());
+app.use(cors())
 
 
 app.get('/getSehir', (req, res) => {

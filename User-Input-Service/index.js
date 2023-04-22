@@ -24,8 +24,9 @@ mongoose.connect(dbURL, {useNewUrlParser : true, useUnifiedTopology: true})
 })
 .catch((err) => console.log(err))
 
-
 app.use(cors());
+
+
 app.use(bodyParser.json());
 
 app.get('/addInput', async (req, res) => {
@@ -98,13 +99,36 @@ app.get('/addInput', async (req, res) => {
 
     };
     
-    if (id != ""){
-      filter = id ? { id: id} : {};
-    }
+
   
     Input.find(filter)
       .then((inputs) => {
         res.send(inputs);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send("An error occurred while retrieving inputs.");
+      });
+  });
+
+  app.get('/checkId', (req, res) => {
+    const id = req.query.id || "";
+
+    if (id != ""){
+      filter = id ? { id: id} : {};
+    }else{
+      res.send(false)
+      return
+    }
+  
+    Input.find(filter)
+      .then((inputs) => {
+        if (!inputs){
+          res.send(inputs);
+        }else{
+          res.send(true)
+        }
+        
       })
       .catch((err) => {
         console.log(err);

@@ -7,7 +7,7 @@ var requestsData = [];
 const pending_button = document.getElementById("pending-button");
 
 pending_button.addEventListener("click",() => {
-	axios.get('https://localhost:3001/getInputs')
+	axios.get('https://localhost:3001/getInputs?status=0')
 	.then(response => {
 		// Save the data to a variable
 		requestsData = response.data;
@@ -19,7 +19,7 @@ pending_button.addEventListener("click",() => {
 	.catch(error => console.error(error));
 })
 // Fetch the data
-axios.get('https://localhost:3001/getInputs')
+axios.get('https://localhost:3001/getInputs?status=0')
 	.then(response => {
 		// Save the data to a variable
 		requestsData = response.data;
@@ -64,7 +64,7 @@ function populateRequests(page) {
 
 		// Format day, month, and year
 		const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-		const date = currentDate.toLocaleDateString('en-US', options);
+		const date = currentDate.toLocaleDateString('tr-TR', options);
 
 		// Combine hour, minute, and date
 		const formattedDate = `${hour}:${minute} - ${date}`;
@@ -130,7 +130,7 @@ function populateRequests(page) {
 			<p><b>Ek Bilgi:</b> ${requestsData[i].add_info}</p>
 			</div>
 		</div>
-			<button class="w3-button w3-block w3-teal w3-large"><b>Talebi Onayla</b></button>
+			<button id= ${requestsData[i].id} class="w3-button w3-block w3-teal w3-large" onclick = "acceptRequest(event)"><b>Talebi Onayla</b></button>
 		</div>
 		`;
 
@@ -138,7 +138,7 @@ function populateRequests(page) {
         // Append the table to the accordion panel
 		accordionPanel.appendChild(accordionChild);
 
-	// Append the accordion panel to the requests div
+	// Append the accordionstatus panel to the requests div
 	requestsDiv.appendChild(accordionPanel);
     }
 
@@ -147,6 +147,29 @@ if (requestsData.length === 0) {
 	requestsDiv.innerHTML = 'No requests to display.';
 }
 }
+
+function acceptRequest(event) {
+	id = event.currentTarget.id;
+	update = { status: "Onaylandı" };
+    axios.put(`https://localhost:3001/changeStatus/${id}`, update)
+    .then(response => {
+        console.log(response.data); // handle the response from the backend
+		axios.get('https://localhost:3001/getInputs?status=0')
+		.then(response => {
+			// Save the data to a variable
+			requestsData = response.data;
+	
+			// Populate the accordion and pagination
+			populateRequests(currentPage);
+			populatePagination();
+		})
+		.catch(error => console.error(error));
+    })
+    .catch(error => {
+        console.error(error); // handle the error
+    });
+}
+
 
 // Function to populate the pagination
 function populatePagination() {
