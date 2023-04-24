@@ -77,23 +77,98 @@
     <div class="w3-container">
 
       <div id="map"></div>
+
       <script>
+
+
         function initMap() {
-          
+
           const apiKey = 'AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&';
+          const options = {
+            zoom: 8,
+            center: { lat: 39.55, lng: 32.51 }
+          };
+          const map = new google.maps.Map(document.getElementById('map'), options);
+
+          const heatmapData = [];
+
+
+          const getDataAndGeocodeLocations = () => {
+            return axios.get('https://localhost:3001/getIlcounts')
+              .then(response => {
+                const data = response.data;
+                const requests = [];
+
+                for (let i = 0; i < data.length; i++) {
+                  const weight = data[i].total_count;
+                  const city = data[i].il_title;
+
+                  const request1 = axios.get(`https://localhost:3001/getIlceCounts/?il_title=${city}`)
+                    .then(response => {
+                      const data1 = response.data;
+                      const requests1 = [];
+
+                      for (let j = 0; j < data1.length; j++) {
+                        const weight1 = data1[j].count;
+                        const district = data1[j].ilce_title;
+
+                        const request2 = axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${district}&key=${apiKey}`)
+                          .then(response => {
+                            if(response.data.results.length > 0){
+                            const location = response.data.results[0].geometry.location;
+                            const lat = location.lat;
+                            const lng = location.lng;
+                            //console.log(location, district );
+                            heatmapData.push({
+                              location: new google.maps.LatLng(lat, lng),
+                              weight: weight1
+                            });
+                          }})
+                          .catch(error => {
+                            console.error(error);
+                          });
+
+                        requests1.push(request2);
+                      }
+
+                      return Promise.all(requests1);
+                    })
+                    .catch(error => {
+                      console.error(error);
+                    });
+
+                  requests.push(request1);
+                }
+
+                return Promise.all(requests);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+          };
+
+
+          getDataAndGeocodeLocations()
+            .then(() => {
+              const heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatmapData,
+                map: map,
+                
+              });
+              heatmap.set('radius', 20);
+              heatmap.set('opacity', 5  );
+            })
+            .catch(error => {
+              console.error(error);
+            });
+
+
 
           axios.get('https://localhost:3001/getInputs')
             .then(response => {
               const data = response.data;
-              
-              const options = {
-                zoom: 8,
-                center: { lat: 39.55, lng: 32.51 }
-              };
 
-              const map = new google.maps.Map(document.getElementById('map'), options);
-
-              for(let i = 0 ; i< data.length; i++){
+              for (let i = 0; i < data.length; i++) {
                 const şehir = data[i].il_title;
                 const ilce = data[i].ilce_title;
                 const mahalle = data[i].mahalle_title;
@@ -109,44 +184,69 @@
                 const helpInfo = `Telefon: ${tel_number} İhtiyaç: ${ihtiyac} Daha fazla Bilgi: ${moreInfo} Tarih: ${date} Durum: ${status}`;
 
                 axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address2}&key=${apiKey}`)
-                .then(response => {
-          
-                  const location = response.data.results[0].geometry.location;
-                  const lat = location.lat;
-                  const lng = location.lng;
+                  .then(response => {
+                    
+                    const location = response.data.results[0].geometry.location;
+                    const lat = location.lat;
+                    const lng = location.lng;
 
-                  const marker = new google.maps.Marker({
-                    position: { lat, lng },
-                    map: map,
-                    title: address2
-                  });
+                    const markerColors = {
 
-                  const informationPanel = new google.maps.InfoWindow({
-                    content: helpInfo
-                  });
+                      "Su": "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                      "Yemek": "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+                      "Tıbbi Malzeme": "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                      "Kurtarma Ekibi": "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+                      "Diğer": "http://maps.google.com/mapfiles/ms/icons/green-dot.png"
+                    }
 
-                  marker.addListener('mouseover', () => {
-                    informationPanel.open(map,marker);
-                  });
+                    const marker = new google.maps.Marker({
+                      position: { lat, lng },
+                      map: map,
+                      title: address2,
+                      icon: markerColors[data[i].ihtiyac_title]
 
-                  marker.addListener('mouseout', () => {
-                    informationPanel.close();
+                    });
+
+                    const informationPanel = new google.maps.InfoWindow({
+                      content: '<div class= "custom-info-window">' + helpInfo + '</div>'
+
+                    });
+
+                    const informationPanelStyle = document.createElement('style');
+                    informationPanelStyle.innerHTML = '.custom-info-window { width: 400px; height: 30px; background-color: white !important; color:black !important;}';
+                    document.getElementsByTagName('head')[0].appendChild(informationPanelStyle);
+
+                    marker.addListener('click', () => {
+                      informationPanel.open(map, marker);
+                    });
+                    /*
+                     marker.addListener('mouseover', () => {
+                      informationPanel.open(map,marker);
+                    });
+  
+                    marker.addListener('mouseout', () => {
+                      informationPanel.close();
+                    });
+                    */
+                  })
+                  .catch(error => {
+                    console.error(error);
                   });
-                })
-                .catch(error => {
-            console.error(error);
-          });
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
-}
+              }
+            })
+
+            .catch(error => {
+              console.error(error);
+            });
+
+
+        }
+
       </script>
-      <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&callback=initMap">
 
-        </script>
+      <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&callback=initMap&libraries=visualization"></script>
+
     </div>
 
     <!-- Grid -->
