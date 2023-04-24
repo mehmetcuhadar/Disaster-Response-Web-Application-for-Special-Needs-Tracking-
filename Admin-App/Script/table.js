@@ -130,7 +130,7 @@ function populateRequests(page) {
 			<p><b>Ek Bilgi:</b> ${requestsData[i].add_info}</p>
 			</div>
 		</div>
-			<button id= ${requestsData[i].id} class="w3-button w3-block w3-teal w3-large" onclick = "acceptRequest(event)"><b>Talebi Onayla</b></button>
+			<button id= ${requestsData[i].id} class="w3-button w3-block w3-round-xxlarge w3-ripple w3-teal w3-large" onclick = "acceptRequest(event)"><b>Talebi Onayla</b></button>
 		</div>
 		`;
 

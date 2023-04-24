@@ -10,14 +10,12 @@ id_button.addEventListener("click", () => {
 		// Save the data to a variable
         current_id = id_input.value;
 		requestsData = response.data;
-        if(!requestsData){
-            console.log("merhaba")
+        if(requestsData == "0"){
             info_card.innerHTML = `
             <div class="w3-panel w3-yellow w3-center">
                 <h3>Lütfen, takip kodu alanını boş bırakmayınız!</h3>
             </div> `;
-        }else if (requestsData){
-            console.log("Could not find")
+        }else if (requestsData == "1"){
             info_card.innerHTML = `
             <div class="w3-panel w3-yellow w3-center">
                 <h3>Bu takip koduyla alakalı herhangi bir talep bulunamadı!</h3>
@@ -100,13 +98,13 @@ function createCard(data) {
         </div>
         <div class="w3-row">
             <div class="w3-col s4">
-                <button id = "on-the-road-button" class = "w3-button w3-block w3-yellow w3-mobile">YOLDA</button>
+                <button id = "on-the-road-button" class = "w3-button w3-block w3-round-large w3-ripple w3-yellow w3-mobile">YOLDA</button>
             </div>
             <div class="w3-col s4">
-                <button id = "arrived-button" class = "w3-button w3-block w3-teal w3-mobile">ULAŞTI</button>
+                <button id = "arrived-button" class = "w3-button w3-block w3-round-large w3-ripple w3-teal w3-mobile">ULAŞTI</button>
             </div>
             <div class="w3-col s4">
-                <button id = "cancel-button" class = "w3-button w3-block w3-red w3-mobile">İPTAL ET</button>
+                <button id = "cancel-button" class = "w3-button w3-block w3-round-large w3-ripple w3-red w3-mobile">İPTAL ET</button>
             </div>
         </div>
     </div>

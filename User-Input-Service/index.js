@@ -117,16 +117,16 @@ app.get('/addInput', async (req, res) => {
     if (id != ""){
       filter = id ? { id: id} : {};
     }else{
-      res.send(false)
+      res.send("0")
       return
     }
   
     Input.find(filter)
       .then((inputs) => {
-        if (!inputs){
+        if (inputs.length != 0){
           res.send(inputs);
         }else{
-          res.send(true)
+          res.send("1")
         }
         
       })
