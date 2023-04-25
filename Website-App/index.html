@@ -43,7 +43,7 @@
       position: relative;
       margin: 0 auto;
     }
-    
+
     #info-card {
       width: 100%;
       max-width: 600px;
@@ -53,6 +53,7 @@
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       border-radius: 5px;
       text-align: center;
+
     }
   </style>
 </head>
@@ -100,9 +101,20 @@
       function initMap() {
 
         const apiKey = 'AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&';
+
+        const bounds = new google.maps.LatLngBounds(
+          new google.maps.LatLng(35.8150, 25.6633), // Southwest corner of Turkey
+          new google.maps.LatLng(42.1083, 44.8172)  // Northeast corner of Turkey
+        );
+
         const options = {
           zoom: 6,
-          center: { lat: 39.55, lng: 32.51 }
+          center: { lat: 39.55, lng: 32.51 },
+          restriction: {
+            latLngBounds: bounds,
+            strictBounds: false
+          }
+
         };
         const map = new google.maps.Map(document.getElementById('map'), options);
 
