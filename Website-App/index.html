@@ -100,6 +100,7 @@
 
       function initMap() {
 
+
         const apiKey = 'AIzaSyDM85PokkPoz3kKN-JiZRrA6EZMyG58KlE&';
 
         const bounds = new google.maps.LatLngBounds(
@@ -220,7 +221,6 @@
                   const lng = location.lng;
 
                   const markerColors = {
-
                     "Su": "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                     "Yemek": "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
                     "Tıbbi Malzeme": "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
@@ -232,43 +232,49 @@
                     position: { lat, lng },
                     map: map,
                     title: address2,
-                    icon: markerColors[data[i].ihtiyac_title]
+                    icon: markerColors[ihtiyac]
+                  });
 
+                  // Set marker visibility based on the zoom level
+                  const zoomLevel = map.getZoom();
+                  if (zoomLevel > 10) {
+                    marker.setMap(map);
+                  } else {
+                    marker.setMap(null);
+                  }
+
+                  google.maps.event.addListener(map, 'zoom_changed', function () {
+                    const zoomLevel = map.getZoom();
+                    console.log(zoomLevel);
+                    if (zoomLevel > 10) {
+                      marker.setMap(map);
+                    } else {
+                      marker.setMap(null);
+                    }
                   });
 
                   const informationPanel = new google.maps.InfoWindow({
                     content: '<div class= "custom-info-window">' + helpInfo + '</div>'
-
                   });
 
                   const informationPanelStyle = document.createElement('style');
                   informationPanelStyle.innerHTML = '.custom-info-window { width: 400px; height: 30px; background-color: white !important; color:black !important;}';
                   document.getElementsByTagName('head')[0].appendChild(informationPanelStyle);
 
+
+
                   marker.addListener('click', () => {
                     informationPanel.open(map, marker);
                   });
-                  /*
-                   marker.addListener('mouseover', () => {
-                    informationPanel.open(map,marker);
-                  });
- 
-                  marker.addListener('mouseout', () => {
-                    informationPanel.close();
-                  });
-                  */
                 })
                 .catch(error => {
                   console.error(error);
                 });
             }
           })
-
           .catch(error => {
             console.error(error);
           });
-
-
       }
 
     </script>
