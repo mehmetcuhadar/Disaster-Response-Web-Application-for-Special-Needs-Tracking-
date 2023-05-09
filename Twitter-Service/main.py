@@ -4,7 +4,7 @@ import tweepy
 # Model
 ner_pipe = pipeline("token-classification", "hny17/finetune_ner")
 
-# Transformer
+# Twitter
 api_key = "A6lWBmbap4Jzwy0oVqhoCoTs8"
 api_secret = "PBJ6GWMtVUd6SQsYZgtZ4Mifiyzvvm5JOmNkbRG3cuzz9BEiNq"
 access_token = "1649053227793645582-ocEQ5aC3ugUeIDaC3MOIOAjQlkiV0H"
