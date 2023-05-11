@@ -25,9 +25,16 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/addUser', async (req, res) => {
-  //const { name, surname, phone, username, password } = req.body;
-  const [name, surname, phone, username, password] = ["Doğukan", "Soyuyüce", "123132", "dsoyuyuce", "111111"];
+  const { name, surname, phone, email, username, password } = req.body;
+
+  // Check if any required fields are missing
+  if (!name || !surname || !phone || !email || !username || !password) {
+    console.log('Missing required fields');
+    return res.status(400).send('Missing required fields');
+  }
+
   const user = await User.findOne({ username });
+
   if (!user) {
     // Handle user not found error
     bcrypt.hash(password + pepper, 10, (err, hash) => {
@@ -35,29 +42,32 @@ app.post('/addUser', async (req, res) => {
         console.log(err);
         res.status(500).send('An error occurred while hashing the password.');
       } else {
-        const input = new User({
+        const newUser = new User({
           name,
           surname,
           phone,
+          email,
           username,
           password: hash,
         });
-        input.save()
+
+        newUser.save()
           .then((result) => {
             res.send(result);
           })
           .catch((err) => {
             console.log(err);
-            res.status(500).send('An error occurred while saving the input.');
+            res.status(500).send('An error occurred while saving the user data.');
           });
       }
     });
-    
-  }else{
-    console.log('User is defined');
+  } else {
+    console.log('User already exists');
+    res.status(400).send('User already exists');
   }
-  
 });
+
+
 
 
 app.post('/login', async (req, res) => {

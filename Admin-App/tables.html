@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
 		/* Style the accordion */
@@ -105,7 +105,59 @@
 
                 <!-- Begin Page Content -->
                 <div id="home" class="container-fluid bar-items">
-                    Başlangıç
+                    <div class="w3-padding-24 w3-center">
+                        <h1>
+                            Genel Durum
+                        </h1>
+                    </div>
+                    <div class="w3-row">
+                        <div id = "total-request-info" class="w3-quarter w3-row-padding w3-card w3-blue w3-padding-32 w3-center">
+                            Total requests
+                        </div>
+                        <div id = "pending-request-info" class="w3-quarter w3-row-padding w3-card w3-yellow w3-padding-32 w3-center">
+                            Pending requests
+                        </div>
+                        <div id = "approved-request-info" class="w3-quarter w3-row-padding w3-card w3-red w3-padding-32 w3-center">
+                            Approved requests
+                        </div>
+                        <div id = "completed-request-info" class="w3-quarter w3-row-padding w3-card w3-green w3-padding-32 w3-center" style="margin-bottom: 30px;">
+                            Completed requests
+                        </div>
+                    </div>
+                   
+                    <div class="w3-card w3-white w3-padding-32 w3-row" style="margin-top: 20px">
+                        <div class="w3-col m8">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        <div class="w3-col m4 w3-center">
+                            <label for="il_select">İl Seçiniz</label>
+                            <select id="il_select" name="il_select">
+                              <option value="">--------</option>
+                            </select>
+                            <div class ="w3-center">
+                                <canvas id="pie_chart"></canvas>
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w3-card w3-white w3-padding-32 w3-row" style="margin-top: 75px">
+                        <div class="w3-col m8">
+                            <canvas id="ihtiyacChart"></canvas>
+                        </div>
+                        <div class="w3-col m4 w3-center">
+                            <label for="ihtiyac_select">İhtiyaç Türü Seçiniz:</label>
+                            <select id="ihtiyac_select" name="ihtiyac_select">
+                                <option value="">--------</option>
+                            </select>
+                            <div>
+                                <canvas id="pie_chart_2"></canvas>
+                            </div>
+                        </div>                       
+                    </div>
+                    
+
+
+                      
                 </div>
                 <div id="search-requests" style="display: none;" class="container-fluid bar-items">
                     <div class="card shadow mb-4">
@@ -126,7 +178,45 @@
                     </div> 
                 </div>
                 <div id="admin" style="display: none;" class="container-fluid bar-items">
-                    Admin Yönetimi
+                    <form id="admin-form" class="w3-container card shadow mb-4 w3-padding-32 w3-white">
+                        <div class="w3-row-padding">
+                          <div class="w3-half">
+                            <label for="name">İsim:</label>
+                            <input class="w3-input w3-border" type="text" id="name" name="name" required>
+                          </div>
+                          <div class="w3-half">
+                            <label for="surname">Soyisim:</label>
+                            <input class="w3-input w3-border" type="text" id="surname" name="surname" required>
+                          </div>
+                        </div>
+                        <div class="w3-row-padding">
+                          <div class="w3-half">
+                            <label for="username">Kullanıcı Adı:</label>
+                            <input class="w3-input w3-border" type="text" id="username" name="username" required>
+                          </div>
+                          <div class="w3-half">
+                            <label for="password">Şifre: <i id="password-toggle-icon" class="fas fa-eye" onclick="togglePasswordVisibility()"></i></label>
+                            <input class="w3-input w3-border password-toggle" type="password" id="password" name="password" required>                            
+                          </div>
+                        </div>
+                        <div class="w3-row-padding">
+                          <div class="w3-full">
+                            <label for="email">Email:</label>
+                            <input class="w3-input w3-border" type="email" id="email" name="email" required>
+                          </div>
+                        </div>
+                        <div class="w3-row-padding">
+                          <div class="w3-full">
+                            <label for="phone">Telefon Numarası:</label>
+                            <input class="w3-input w3-border" type="tel" id="phone" name="phone" required>
+                          </div>
+                        </div>
+                        <div class="w3-row-padding">
+                          <div class="w3-full">
+                            <input id = "new-admin" class="w3-button w3-blue w3-margin-top" type="submit" onclick="addUser()" value="Yeni Kullanıcı Oluştur">
+                          </div>
+                        </div>
+                    </form>
                 </div>
                 <div id="pending-requests" style="display: none;" class="container-fluid bar-items">
                     <!-- DataTales Example -->
@@ -134,10 +224,10 @@
                         <div class="card-header">
                             <form class="navbar-search">
                                 <div class="input-group">
-                                    <input type="text" class="form-control w3-border-deep-purple" placeholder="Search for..."
-                                        aria-label="Search" aria-describedby="basic-addon2">
+                                    <input type="text" id="search-input" class="form-control w3-border-deep-purple" placeholder="Search for..."
+                                        aria-label="Search" aria-describedby="basic-addon2" onchange="performSearch()">
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary" type="button">
+                                        <button class="btn btn-primary" type="button" onclick="performSearch()">
                                             <i class="fas fa-search fa-sm"></i>
                                         </button>
                                     </div>
@@ -184,6 +274,7 @@
     <script src="./Script/navigation.js"></script>
     <script src="./Script/admin.js"></script>
     <script src="./Script/request.js"></script>
+    <script src="./Script/graph.js"></script>
 </body>
 
 </html>

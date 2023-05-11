@@ -3,34 +3,65 @@
 var currentPage = 1;
 var requestsPerPage = 10;
 var requestsData = [];
-
+var originalRequestsData = [];
 const pending_button = document.getElementById("pending-button");
 
 pending_button.addEventListener("click",() => {
 	axios.get('https://localhost:3001/getInputs?status=0')
 	.then(response => {
-		// Save the data to a variable
-		requestsData = response.data;
-
-		// Populate the accordion and pagination
-		populateRequests(currentPage);
-		populatePagination();
+	  // Save the data to variables
+	  requestsData = response.data;
+	  originalRequestsData = response.data;
+  
+	  // Populate the accordion and pagination
+	  populateRequests(currentPage);
+	  populatePagination();
 	})
 	.catch(error => console.error(error));
+  
 })
 // Fetch the data
 axios.get('https://localhost:3001/getInputs?status=0')
-	.then(response => {
-		// Save the data to a variable
-		requestsData = response.data;
+  .then(response => {
+    // Save the data to variables
+    requestsData = response.data;
+    originalRequestsData = response.data;
 
-		// Populate the accordion and pagination
-		populateRequests(currentPage);
-		populatePagination();
-	})
-	.catch(error => console.error(error));
+    // Populate the accordion and pagination
+    populateRequests(currentPage);
+    populatePagination();
+  })
+  .catch(error => console.error(error));
 
-
+  function performSearch() {
+	var searchInput = document.getElementById('search-input');
+	var searchParam = searchInput.value.trim().toLocaleLowerCase('tr-TR');
+  
+	// Reset requestsData to originalRequestsData if searchParam is empty
+	if (searchParam === '') {
+	  requestsData = originalRequestsData;
+	} else {
+	  // Filter the requests based on the search term
+	  requestsData = originalRequestsData.filter(request => {
+		return (
+		  request.il_title.toLocaleLowerCase('tr-TR').includes(searchParam) ||
+		  request.ilce_title.toLocaleLowerCase('tr-TR').includes(searchParam) ||
+		  request.mahalle_title.toLocaleLowerCase('tr-TR').includes(searchParam) ||
+		  request.sokak_cadde_title.toLocaleLowerCase('tr-TR').includes(searchParam) ||
+		  request.site_title.toLocaleLowerCase('tr-TR').includes(searchParam) ||
+		  request.apartman_title.toLocaleLowerCase('tr-TR').includes(searchParam) ||
+		  request.tel_number.toLocaleLowerCase('tr-TR').includes(searchParam)
+		);
+	  });
+	}
+  
+	// Reset the currentPage to 1 and repopulate the accordion and pagination
+	currentPage = 1;
+	populateRequests(currentPage);
+	populatePagination();
+  }
+  
+	  
 
 // Function to populate the accordion with requests data
 function populateRequests(page) {

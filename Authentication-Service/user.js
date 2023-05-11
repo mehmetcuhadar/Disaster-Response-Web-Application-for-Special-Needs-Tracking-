@@ -9,8 +9,12 @@ const userSchema = new Schema({
     surname: {
         type : String,
         require : true
-     },
-     phone :{
+    },
+    phone :{
+        type : String,
+        require : true
+    },
+    mail :{
         type : String,
         require : true
     },
