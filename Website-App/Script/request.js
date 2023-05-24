@@ -5,28 +5,29 @@ var on_the_road_button, arrived_button, cancel_button;
 var current_id;
 
 id_button.addEventListener("click", () => {
-    axios.get(`https://localhost:3001/checkId?id=${id_input.value}`)
-	.then(response => {
-		// Save the data to a variable
+    axios
+      .get(`https://localhost:3001/checkId?id=${id_input.value}`)
+      .then(response => {
+        // Save the data to a variable
         current_id = id_input.value;
-		requestsData = response.data;
-        if(requestsData == "0"){
-            info_card.innerHTML = `
-            <div class="w3-panel w3-round-xxlarge w3-deep-purple w3-center">
-                <h3>Lütfen, takip kodu alanını boş bırakmayınız!</h3>
+        requestsData = response.data;
+        if (requestsData == "0") {
+          info_card.innerHTML = `
+            <div class="w3-panel w3-round-xxlarge w3-center">
+              <h3 style="font-family: 'Gill Sans', sans-serif;">Lütfen, takip kodu alanını boş bırakmayınız!</h3>
             </div> `;
-        }else if (requestsData == "1"){
-            info_card.innerHTML = `
-            <div class="w3-panel w3-round-xxlarge w3-deep-purple w3-center">
-                <h3>Bu takip koduyla alakalı herhangi bir talep bulunamadı!</h3>
+        } else if (requestsData == "1") {
+          info_card.innerHTML = `
+            <div class="w3-panel w3-round-xxlarge w3-center">
+              <h3 style="font-family: 'Gill Sans', sans-serif;">Bu takip koduyla alakalı herhangi bir talep bulunamadı!</h3>
             </div> `;
-        }else{
-            createCard(requestsData[0])
+        } else {
+          createCard(requestsData[0]);
         }
-        
-	})
-	.catch(error => console.error(error));
-})
+      })
+      .catch(error => console.error(error));
+  });
+  
 
 
 
