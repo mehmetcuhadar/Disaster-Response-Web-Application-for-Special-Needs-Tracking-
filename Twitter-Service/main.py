@@ -1,10 +1,14 @@
 import time
-import json
+import requests
+import random
+import urllib3
 from transformers import pipeline
 import tweepy
 import datetime
 import pytz
-from pymongo import MongoClient
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Model
 ner_pipe = pipeline("token-classification", "hny17/finetune_ner")
@@ -27,9 +31,6 @@ time_window = datetime.timedelta(minutes=1)
 timezone = pytz.timezone('Europe/Istanbul')
 processed_tweet_ids = set()
 
-client = MongoClient('mongodb+srv://mcuhadar18:ee8iLI9KF5HpYpoM@adress.qai6yhk.mongodb.net/input-log?retryWrites=true&w=majority')
-db = client['input_log']
-collection = db['twitter_data']
 
 while True:
     current_time = datetime.datetime.now(timezone)
@@ -60,6 +61,12 @@ while True:
                 'tel_number': ''
             }
 
+            request_data = {
+                'label': '',
+                'add_info': ''
+            }
+
+
             for entity in location:
                 if entity['entity'] == 'B-il':
                     location_data['il_title'] = entity['word']
@@ -89,9 +96,12 @@ while True:
                     location_data['tel_number'] = entity['word']
                 elif entity['entity'] == 'I-tel':
                     location_data['tel_number'] = ' ' + entity['word']
+            
+            for entity in request:
+                request_data["label"] = entity["label"]
+
 
             input_data = {
-                'id': str(tweet.id),
                 'il_title': location_data['il_title'],
                 'ilce_title': location_data['ilce_title'],
                 'mahalle_title': location_data['mahalle_title'],
@@ -99,15 +109,16 @@ while True:
                 'site_title': location_data['site_title'],
                 'apartman_title': location_data['apartman_title'],
                 'tel_number': location_data['tel_number'],
-                'ihtiyac_title': request['label'],
-                'add_info': request['add_info'],
-                'created_at': tweet_time,
-                'status': 'active'
+                'ihtiyac_title': request_data['label'],
+                'add_info': tweet.text
             }
-
-            collection.insert_one(input_data)
+            print(input_data)
             print("Data inserted into MongoDB")
+            post_url = 'https://localhost:3001'
 
+
+            # POST random data to addInput endpoint
+            requests.get(f'{post_url}/addInput', params= input_data, verify=False)
             processed_tweet_ids.add(tweet.id)
 
-    time.sleep(3)
+    time.sleep(59)
