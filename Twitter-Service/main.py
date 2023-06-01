@@ -1,11 +1,11 @@
 import time
 import requests
-import random
 import urllib3
 from transformers import pipeline
 import tweepy
 import datetime
 import pytz
+import locale
 
 # Disable SSL warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -100,18 +100,28 @@ while True:
             for entity in request:
                 request_data["label"] = entity["label"]
 
+            
+
+            # Set the locale to Turkish
+            locale.setlocale(locale.LC_ALL, 'tr_TR.UTF-8')
 
             input_data = {
-                'il_title': location_data['il_title'],
-                'ilce_title': location_data['ilce_title'],
+                'il_title': location_data['il_title'].upper(),
+                'ilce_title': location_data['ilce_title'].upper(),
                 'mahalle_title': location_data['mahalle_title'],
                 'sokak_cadde_title': location_data['sokak_cadde_title'],
                 'site_title': location_data['site_title'],
                 'apartman_title': location_data['apartman_title'],
                 'tel_number': location_data['tel_number'],
-                'ihtiyac_title': request_data['label'],
                 'add_info': tweet.text
             }
+
+            if request_data['label'] == 'Kurtarma':
+                input_data['ihtiyac_title'] = 'Kurtarma Ekibi'
+            else:
+                input_data['ihtiyac_title'] = request_data['label']
+
+
             print(input_data)
             print("Data inserted into MongoDB")
             post_url = 'https://localhost:3001'

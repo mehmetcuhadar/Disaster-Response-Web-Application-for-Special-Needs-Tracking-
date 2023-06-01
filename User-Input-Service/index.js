@@ -39,7 +39,7 @@ app.get('/addInput', async (req, res) => {
     sokak_cadde_title: req.query.sokak_cadde_title || "",  // Use the value of sokak_cadde_title query parameter 
     site_title: req.query.site_title || "",
     apartman_title: req.query.apartman_title || "",
-    tel_number: "".concat("+90",req.query.tel_number) || "",
+    tel_number: "".concat("+90",req.query.tel_number || "") || "",
     ihtiyac_title: req.query.ihtiyac_title || "",
     add_info: req.query.add_info || "",
     created_at: moment.tz('Europe/Istanbul').toDate(),

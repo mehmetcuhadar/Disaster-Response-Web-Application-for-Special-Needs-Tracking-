@@ -415,22 +415,19 @@
                 for (let j = 0; j < addressComponents.length; j++) {
                   const component = addressComponents[j];
                   const types = component.types;
-                  // console.log(types);
+                  
                   if (types.includes("administrative_area_level_1")) {
-                    city = component.long_name;
-
+                    city = component.long_name.toLocaleUpperCase('tr-TR');
                   } else if (types.includes("administrative_area_level_2")) {
-                    district = component.long_name;
-
+                    district = component.long_name.toLocaleUpperCase('tr-TR');
                   } else if (types.includes("administrative_area_level_4")) {
                     neighborhood = component.long_name;
-
-                  }
-                  else if (types.includes("route")) {
+                  } else if (types.includes("route")) {
                     street = component.long_name;
                   }
                 }
               }
+
               console.log("şehir, ilçe, mahalle, sokak: " + city, district, neighborhood, street);
               axios.get('https://localhost:3001/addInput', {
                 params: {
