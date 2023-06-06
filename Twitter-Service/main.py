@@ -68,34 +68,62 @@ while True:
 
 
             for entity in location:
+                # İl
                 if entity['entity'] == 'B-il':
-                    location_data['il_title'] = entity['word']
+                    location_data['il_title'] = entity['word'].replace('##', '')
                 elif entity['entity'] == 'I-il':
-                    location_data['il_title'] = ' ' + entity['word']
+                    if entity['word'].startswith('##'):
+                        location_data['il_title'] += entity['word'][2:]
+                    else:
+                        location_data['il_title'] += ' ' + entity['word']
+                # İlçe
                 elif entity['entity'] == 'B-ilce':
-                    location_data['ilce_title'] = entity['word']
+                    location_data['ilce_title'] = entity['word'].replace('##', '')
                 elif entity['entity'] == 'I-ilce':
-                    location_data['ilce_title'] = ' ' + entity['word']
+                    if entity['word'].startswith('##'):
+                        location_data['ilce_title'] += entity['word'][2:]
+                    else:
+                        location_data['ilce_title'] += ' ' + entity['word']
+                # Mahalle
                 elif entity['entity'] == 'B-mahalle':
-                    location_data['mahalle_title'] = entity['word']
+                    location_data['mahalle_title'] = entity['word'].replace('##', '')
                 elif entity['entity'] == 'I-mahalle':
-                    location_data['mahalle_title'] = ' ' + entity['word']
+                    if entity['word'].startswith('##'):
+                        location_data['mahalle_title'] += entity['word'][2:]
+                    else:
+                        location_data['mahalle_title'] += ' ' + entity['word']
+                # Sokak
                 elif entity['entity'] == 'B-sokak':
-                    location_data['sokak_cadde_title'] = entity['word']
+                    location_data['sokak_cadde_title'] = entity['word'].replace('##', '')
                 elif entity['entity'] == 'I-sokak':
-                    location_data['sokak_cadde_title'] = ' ' + entity['word']
+                    if entity['word'].startswith('##'):
+                        location_data['sokak_cadde_title'] += entity['word'][2:]
+                    else:
+                        location_data['sokak_cadde_title'] += ' ' + entity['word']
+                # Site
                 elif entity['entity'] == 'B-site':
-                    location_data['site_title'] = entity['word']
+                    location_data['site_title'] = entity['word'].replace('##', '')
                 elif entity['entity'] == 'I-site':
-                    location_data['site_title'] = ' ' + entity['word']
-                elif entity['entity'] == 'B-apartman':
-                    location_data['apartman_title'] = entity['word']
-                elif entity['entity'] == 'I-apartman':
-                    location_data['apartman_title'] = ' ' + entity['word']
+                    if entity['word'].startswith('##'):
+                        location_data['site_title'] += entity['word'][2:]
+                    else:
+                        location_data['site_title'] += ' ' + entity['word']
+                # Apartman
+                elif entity['entity'] == 'B-Apartman/Site':
+                    location_data['apartman_title'] = entity['word'].replace('##', '')
+                elif entity['entity'] == 'I-Apartman/Site':
+                    if entity['word'].startswith('##'):
+                        location_data['apartman_title'] += entity['word'][2:]
+                    else:
+                        location_data['apartman_title'] += ' ' + entity['word']
+                # Tel No
                 elif entity['entity'] == 'B-tel':
-                    location_data['tel_number'] = entity['word']
+                    location_data['tel_number'] = entity['word'].replace('##', '')
                 elif entity['entity'] == 'I-tel':
-                    location_data['tel_number'] = ' ' + entity['word']
+                    if entity['word'].startswith('##'):
+                        location_data['tel_number'] += entity['word'][2:]
+                    else:
+                        location_data['tel_number'] += ' ' + entity['word']
             
             for entity in request:
                 request_data["label"] = entity["label"]
