@@ -15,11 +15,16 @@ ner_pipe = pipeline("token-classification", "hny17/finetune_ner")
 intent_pipe = pipeline("text-classification", "hny17/finetune_req")
 
 # Twitter tokens
-bearer_token = "AAAAAAAAAAAAAAAAAAAAAFGWmwEAAAAAWyB6K98ZlDcPeoGipF1boVb0lcU%3DYS7g9Z2Ny8M1cxaH4vI7s8OyLqBanO2g57pIgswPaeYhsrT44T"
-api_key = "tPvhOVJ9cGgHR4yGERZyx1iya"
-api_secret = "HP9V9JZttSkns1IeMa844glzVODofe7k8olMRrJdrYPZ5vJKMv"
-access_token = "1649053227793645582-9a0B2C0s3ReYlCzy9J2KvmRzSuRP6K"
-access_token_secret = "QmIs74ulBcs4gbxim2662rs7TBJwZN7ADVtwuP7sF0mYC"
+# bearer_token = "AAAAAAAAAAAAAAAAAAAAAFGWmwEAAAAAWyB6K98ZlDcPeoGipF1boVb0lcU%3DYS7g9Z2Ny8M1cxaH4vI7s8OyLqBanO2g57pIgswPaeYhsrT44T"
+# api_key = "tPvhOVJ9cGgHR4yGERZyx1iya"
+# api_secret = "HP9V9JZttSkns1IeMa844glzVODofe7k8olMRrJdrYPZ5vJKMv"
+# access_token = "1649053227793645582-9a0B2C0s3ReYlCzy9J2KvmRzSuRP6K"
+# access_token_secret = "QmIs74ulBcs4gbxim2662rs7TBJwZN7ADVtwuP7sF0mYC"
+bearer_token = "AAAAAAAAAAAAAAAAAAAAAFGWmwEAAAAAi5f14AT8dscp%2FL6XCfs2l5AJ%2BFE%3DZ1ZLoBdL9oUBonfWYmPSFqaCM1zWXKUXuw9sVglu0HvZsV2OQs"
+api_key = "jvgexrUza8159zxXdxk3vS8e8"
+api_secret = "nh83YO2tPR0MqZhbSD7LdEgmcKuPXf9WErQagHPpbkHX35xMuN"
+access_token = "1649053227793645582-LqJZGz3jXRbdUjuPBMbnrhjuDMs5cl"
+access_token_secret = "3TNkkPcBXeMYEYEBmn7E0qf3PqUNfTvqf6Uo2QMuE0mCh"
 
 auth = tweepy.OAuthHandler(api_key, api_secret)
 auth.set_access_token(access_token, access_token_secret)
